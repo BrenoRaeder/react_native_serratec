@@ -4,7 +4,7 @@ import {
     Text, 
     TextInput, 
     StyleSheet, 
-    Button,
+    Pressable,
 } from 'react-native';
 
 function Login() {
@@ -28,16 +28,17 @@ function Login() {
                 <TextInput
                     style={styles.input}
                     placeholder="password"
+                    secureTextEntry={true}
                     onChangeText={setPassword}
                     value={password}
                 />
-                <View style={{ width: '80%', margin: 'auto' }}>
-                    <Button
-                        title="Login"
-                        color="#000"
-                        onPress={() => handleLogin()}
-                    />
-                </View>
+                    <Pressable
+                        style={({pressed}) => !pressed ? styles.button : styles.buttonPressed}
+                    >
+                        <Text style={styles.txtButton}>
+                            Login
+                        </Text>
+                    </Pressable>
             </View>
         </View>
     )
@@ -49,14 +50,14 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         gap: 50,
-        width: '70%',
+        width: '100%',
         alignItems: 'center',
     },
     containerLogin: {
         display: 'flex',
         justifyContent: 'center',
         gap: 20,
-        width: '100%',
+        width: '70%',
     },
     text: {
         fontSize: 50,
@@ -68,9 +69,36 @@ const styles = StyleSheet.create({
         width: '100%',
         borderWidth: 1,
         padding: 5,
-        borderColor: '#000',
+        borderColor: '#1b1c1b',
         fontFamily: 'monospace',
         fontSize: 18,
+    },
+    button: {
+        backgroundColor: '#1b1c1b',
+        width: '70%',
+        margin: 'auto',
+        height: 40,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+       
+    },
+    buttonPressed: {
+        backgroundColor: '#fff',
+        width: '70%',
+        margin: 'auto',
+        height: 40,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        transition: '.3s',
+    },  
+    txtButton: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 17,
+        fontFamily: 'monospace',
+        transition: '.3s',
     },
 })
 
