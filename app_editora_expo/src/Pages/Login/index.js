@@ -1,18 +1,41 @@
-import { useState } from 'react';
-import { 
+import { useState, useContext } from 'react';
+import AxiosInstance from '../../api/AxiosInstance';
+import { DataContext } from '../../context/DataContext';
+import {
     View,
-    Text, 
-    TextInput, 
-    StyleSheet, 
+    Text,
+    TextInput,
+    StyleSheet,
     Pressable,
 } from 'react-native';
 
-function Login() {
+function Login({ navigation }) {
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    //importando método do contexto
+    const { armazenarDadosUsuario } = useContext(DataContext);
 
-    function handleLogin() {
-        console.log(email);
+    async function handleLogin() {
+
+        try {
+            const result = await AxiosInstance.post('/auth/signin', {
+                username: email,
+                password: password,
+            });
+
+            if (result.status === 200) {
+                //accessToken
+                let jwtToken = result.data;
+                armazenarDadosUsuario(jwtToken["accessToken"]);
+
+                navigation.navigate("Home");
+            } else {
+                console.log('erro ao realizar o login')
+            }
+        } catch (error) {
+            console.log('Erro de requisição: ' + error);
+        }
     }
 
     return (
@@ -32,13 +55,14 @@ function Login() {
                     onChangeText={setPassword}
                     value={password}
                 />
-                    <Pressable
-                        style={({pressed}) => !pressed ? styles.button : styles.buttonPressed}
-                    >
-                        <Text style={styles.txtButton}>
-                            Login
-                        </Text>
-                    </Pressable>
+                <Pressable
+                    style={({ pressed }) => !pressed ? styles.button : styles.buttonPressed}
+                    onPress={() => handleLogin()}
+                >
+                    <Text style={styles.txtButton}>
+                        Login
+                    </Text>
+                </Pressable>
             </View>
         </View>
     )
@@ -81,7 +105,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-       
+
     },
     buttonPressed: {
         backgroundColor: '#fff',
@@ -92,7 +116,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         transition: '.3s',
-    },  
+    },
     txtButton: {
         color: '#fff',
         textAlign: 'center',

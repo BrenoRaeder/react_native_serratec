@@ -11,7 +11,7 @@ export const Container = styled.View`
 `;
 
 export const PublishingCompanyCard = styled.View`
-    background-color: #1b1c1b;
+    background-image: ${(props) => {return props.img}};
     color: #fff;
     width: 150px;
     height: 150px;
